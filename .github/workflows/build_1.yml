@@ -148,7 +148,7 @@ jobs:
     - name: Locate output
       id: out
       run: |
-          OUT_DIR=~/OrangeFox/fox_${{ github.event.inputs.manifest_branch }}/out/target/product/${{ github.event.inputs.device_name }}
+          OUT_DIR=~/OrangeFox/fox_${{ github.event.inputs.manifest_branch }}
           echo "out_dir=$OUT_DIR" >> $GITHUB_OUTPUT
           ls -la "$OUT_DIR" | grep -iE 'orangefox|recovery|\.img|\.zip' || true
 
