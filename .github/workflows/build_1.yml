@@ -16,10 +16,20 @@ on:
         description: 'Custom Recovery Tree'
         required: true
         default: 'https://github.com/chematelegram/twrp_cepheus'
+        type: choice
+        options:
+        - https://github.com/chematelegram/twrp_cepheus
+        - https://github.com/JoK3rLeE/twrp_cepheus      
       DEVICE_TREE_BRANCH:
         description: 'Custom Recovery Tree Branch'
         required: true
         default: 'ofox_12.1_retrofit'
+        type: choice
+        options:
+        - ofox_12.1_retrofit_metadata
+        - ofox_12.1-legacy
+        - ofox_12.1_retrofit
+        - ofox_12.1
       DEVICE_PATH:
         description: 'Specify your device path.'
         required: true
@@ -49,7 +59,7 @@ on:
 
 jobs:
   build:
-    name: Build OFRP by ${{ github.actor }}
+    name: Build OrangeFox by ${{ github.actor }}
     runs-on: ubuntu-latest
 
     steps:
