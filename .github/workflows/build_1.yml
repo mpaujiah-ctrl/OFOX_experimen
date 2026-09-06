@@ -40,12 +40,7 @@ on:
       LDCHECK:
         description: 'Path of blobs to check' 
         required: true
-        default: 'system/bin/qseecomd'
-      RECOVERY_TAR:
-        description: 'Release recovery.tar For Samsung devices'
-        required: false
-        default: false
-        type: boolean
+        default: 'system/bin/qseecomd' 
       RECOVERY_INSTALLER:
         description: 'Include recovery installer zip'
         type: boolean
@@ -66,7 +61,6 @@ jobs:
         echo "::group::User Environment Variables"
         echo "Displaying variables/inputs."
         echo "Include Recovery Installer: ${{ github.event.inputs.RECOVERY_INSTALLER }}"
-        echo "Release recovery.tar For Samsung devices: ${{ github.event.inputs.RECOVERY_TAR }}"
         echo "::endgroup::"
 
     - name: Clean-up
