@@ -94,6 +94,10 @@ jobs:
         set +e
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
+        export FOX_MAINTAINER_PATCH_VERSION=07
+        export OF_SKIP_FBE_DECRYPTION=0
+        export OF_FIX_DECRYPTION_ON_DATA_MEDIA=1
+        export OF_DEFAULT_TIMEZONE=CET+7
         set -e
         lunch twrp_${{ inputs.DEVICE_NAME }}-eng && make clean && mka adbd ${{ inputs.BUILD_TARGET }}image
 
