@@ -111,6 +111,16 @@ jobs:
         set +e
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
+        export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
+        export LC_ALL=C
+        export FOX_DELETE_AROMAFM=0
+        export OF_ADVANCED_SECURITY=1
+        export OF_USE_LOCKSCREEN_BUTTON=1
+        export OF_ENABLE_LPTOOLS=1
+        export FOX_ENABLE_APP_MANAGER=1
+        export OF_QUICK_BACKUP_LIST="/data;/persist_image;/boot;"
+        export OF_USE_GREEN_LED=0
+        export OF_MAINTAINER="${{ github.actor }}"
         set -e
         ${{ steps.fox_branch.outputs.value }}
 
