@@ -10,8 +10,7 @@ on:
         type: choice
         options:
         - twrp-12.1
-        - twrp-11
-        - twrp-9.0
+        - twrp-11       
       DEVICE_TREE:
         description: 'Device Tree'
         required: true
@@ -20,6 +19,11 @@ on:
         description: 'Device Tree Branch (verify on GitHub first!)'
         required: true
         default: 'twrp_12.1_erofs'
+        type: choice
+        options:
+        - twrp_12.1_erofs
+        - twrp_12.1_retrofit
+        - twrp13        
       DEVICE_PATH:
         description: 'Specify your device path.'
         required: true
@@ -32,12 +36,7 @@ on:
         description: 'Specify your Build Target'
         required: true
         default: 'recovery'
-        type: choice
-        options:
-        - boot
-        - recovery
-        - vendorboot
-
+      
 jobs:
   build:
     name: Build TWRP by ${{ github.actor }}
