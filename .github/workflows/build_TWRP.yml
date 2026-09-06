@@ -1,0 +1,115 @@
+name: TWRP - Build cepheus
+
+on:
+  workflow_dispatch:
+    inputs:
+      MANIFEST_BRANCH:
+        description: 'TWRP Minimal Manifest Branch'
+        required: true
+        default: 'twrp-12.1'
+        type: choice
+        options:
+        - twrp-12.1
+        - twrp-11
+        - twrp-9.0
+      DEVICE_TREE:
+        description: 'Device Tree'
+        required: true
+        default: 'https://github.com/tribual/twrp_cepheus'
+      DEVICE_TREE_BRANCH:
+        description: 'Device Tree Branch (verify on GitHub first!)'
+        required: true
+        default: 'master'
+      DEVICE_PATH:
+        description: 'Specify your device path.'
+        required: true
+        default: 'device/xiaomi/cepheus'
+      DEVICE_NAME:
+        description: 'Specify your Device Codename.'
+        required: true
+        default: 'cepheus'
+      BUILD_TARGET:
+        description: 'Specify your Build Target'
+        required: true
+        default: 'recovery'
+        type: choice
+        options:
+        - boot
+        - recovery
+        - vendorboot
+
+jobs:
+  build:
+    name: Build TWRP by ${{ github.actor }}
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Display Inputs
+      run: |
+        echo "::group::User Environment Variables"
+        echo "Manifest Branch: ${{ github.event.inputs.MANIFEST_BRANCH }}"
+        echo "Device Tree: ${{ github.event.inputs.DEVICE_TREE }} @ ${{ github.event.inputs.DEVICE_TREE_BRANCH }}"
+        echo "::endgroup::"
+
+    - name: Clean-up
+      uses: rokibhasansagar/slimhub_actions@main
+
+    - name: Swap Space
+      uses: pierotofy/set-swap-space@master
+      with:
+        swap-size-gb: 24
+
+    - name: Build Environment
+      run: |
+        sudo apt update
+        sudo apt -y upgrade
+        git clone https://gitlab.com/OrangeFox/misc/scripts
+        cd scripts
+        sudo bash setup/android_build_env.sh
+
+    - name: Set-up Manifest (TWRP minimal manifest)
+      run: |
+        mkdir -p ${GITHUB_WORKSPACE}/TWRP
+        cd ${GITHUB_WORKSPACE}/TWRP
+        git config --global user.name "AS"
+        git config --global user.email "WWW"
+        repo init -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b ${{ github.event.inputs.MANIFEST_BRANCH }}
+        repo sync -j$(nproc --all) --force-sync
+
+    - name: Clone Device Tree
+      run: |
+        cd ${GITHUB_WORKSPACE}/TWRP
+        git clone ${{ github.event.inputs.DEVICE_TREE }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
+        cd ${{ github.event.inputs.DEVICE_PATH }}
+        echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+    - name: Building TWRP
+      run: |
+        cd ${GITHUB_WORKSPACE}/TWRP
+        set +e
+        source build/envsetup.sh
+        export ALLOW_MISSING_DEPENDENCIES=true
+        set -e
+        lunch twrp_${{ github.event.inputs.DEVICE_NAME }}-eng
+        make clean
+        mka ${{ github.event.inputs.BUILD_TARGET }}image
+
+    - name: Locate output
+      id: out
+      run: |
+          OUT_DIR=${GITHUB_WORKSPACE}/TWRP/out/target/product/${{ github.event.inputs.DEVICE_NAME }}
+          echo "out_dir=$OUT_DIR" >> $GITHUB_OUTPUT
+          ls -la "$OUT_DIR" | grep -iE 'twrp|recovery|\.img|\.zip' || true
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+          name: TWRP-cepheus-${{ github.run_number }}
+          path: |
+            ${{ steps.out.outputs.out_dir }}/recovery.img
+            ${{ steps.out.outputs.out_dir }}/*.zip
+          if-no-files-found: warn
+          retention-days: 14
