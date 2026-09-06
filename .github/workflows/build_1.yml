@@ -122,6 +122,9 @@ jobs:
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
         export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
+        export OF_SKIP_FBE_DECRYPTION=0
+        export OF_FIX_DECRYPTION_ON_DATA_MEDIA=1
+        export OF_DEFAULT_TIMEZONE=CET+7
         export LC_ALL=C
         export FOX_DELETE_AROMAFM=0
         export OF_ADVANCED_SECURITY=1
