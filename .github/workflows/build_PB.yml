@@ -10,7 +10,7 @@ on:
         type: choice
         options:
         - android-12.1
-        - android-11       
+        - android-11.0       
       DEVICE_TREE:
         description: 'Device Tree'
         required: true
@@ -75,7 +75,7 @@ jobs:
         cd ${GITHUB_WORKSPACE}/TWRP
         git config --global user.name "Agus"
         git config --global user.email "WWW"
-        repo init -u https://github.com/PitchBlackRecoveryProject/manifest_pb -b ${{ github.event.inputs.MANIFEST_BRANCH }}
+        repo init -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b ${{ github.event.inputs.MANIFEST_BRANCH }}
         repo sync -j$(nproc --all) --force-sync
 
     - name: Clone Device Tree
