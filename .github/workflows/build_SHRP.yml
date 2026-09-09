@@ -100,6 +100,10 @@ jobs:
         echo "Isi akhir BoardConfig.mk:"
         tail -n 10 $DEVICE_CONFIG
     
+    - name: Patch fs_mgr Android.bp
+      run: |
+        sed -i 's/"libfscrypttwrp"/"libfscrypt"/g' ${GITHUB_WORKSPACE}/TWRP/system/core/fs_mgr/Android.bp || true
+    
     - name: Building TWRP
       run: |
         cd ${GITHUB_WORKSPACE}/TWRP
