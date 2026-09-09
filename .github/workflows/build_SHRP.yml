@@ -89,6 +89,10 @@ jobs:
         cd ${{ github.event.inputs.DEVICE_PATH }}
         echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
+    - name: Inject FSCRYPT Fix
+      run: |
+        echo "TW_USE_EXTERNAL_FSCRYPT := true" >> ${GITHUB_WORKSPACE}/TWRP/${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
+    
     - name: Building TWRP
       run: |
         cd ${GITHUB_WORKSPACE}/TWRP
