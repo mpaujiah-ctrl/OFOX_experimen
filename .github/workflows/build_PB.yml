@@ -87,7 +87,7 @@ jobs:
 
     - name: Building TWRP
       run: |
-        cd ${GITHUB_WORKSPACE}
+        cd ${GITHUB_WORKSPACE}/TWRP
         set +e
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
