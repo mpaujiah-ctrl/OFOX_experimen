@@ -91,7 +91,14 @@ jobs:
 
     - name: Inject FSCRYPT Fix
       run: |
-        echo "TW_USE_EXTERNAL_FSCRYPT := true" >> ${GITHUB_WORKSPACE}/TWRP/${{ github.event.inputs.DEVICE_PATH }}/BoardConfig.mk
+        DEVICE_CONFIG=$(find ${GITHUB_WORKSPACE} -name "BoardConfig.mk" | grep "cepheus")
+        echo "TW_USE_EXTERNAL_FSCRYPT := true" >> $DEVICE_CONFIG
+        echo "TW_INCLUDE_CRYPTO := true" >> $DEVICE_CONFIG
+        echo "TW_INCLUDE_CRYPTO_FBE := true" >> $DEVICE_CONFIG
+        echo "Pemeriksaan lokasi file BoardConfig:"
+        echo $DEVICE_CONFIG
+        echo "Isi akhir BoardConfig.mk:"
+        tail -n 10 $DEVICE_CONFIG
     
     - name: Building TWRP
       run: |
@@ -99,6 +106,7 @@ jobs:
         set +e
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
+        export TW_INCLUDE_CRYPTO=true
         set -e
         lunch twrp_${{ github.event.inputs.DEVICE_NAME }}-eng
         mka ${{ github.event.inputs.BUILD_TARGET }}image
