@@ -73,7 +73,7 @@ jobs:
       run: |
         mkdir -p ${GITHUB_WORKSPACE}/TWRP
         cd ${GITHUB_WORKSPACE}/TWRP
-        git config --global user.name "AS"
+        git config --global user.name "Agus"
         git config --global user.email "WWW"
         repo init -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b ${{ github.event.inputs.MANIFEST_BRANCH }}
         repo sync -j$(nproc --all) --force-sync
