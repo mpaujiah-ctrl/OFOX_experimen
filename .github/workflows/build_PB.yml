@@ -101,9 +101,9 @@ jobs:
         # Ubah isi referensi twrp_cepheus di AndroidProducts.mk menjadi pb_cepheus
         sed -i 's/twrp_cepheus/pb_cepheus/g' AndroidProducts.mk
         sed -i 's/twrp_cepheus/pb_cepheus/g' pb_cepheus.mk
-        lunch twrp_${{ github.event.inputs.DEVICE_NAME }}-eng
+        lunch pb_${{ github.event.inputs.DEVICE_NAME }}-eng
         make clean
-        mka ${{ github.event.inputs.BUILD_TARGET }}image
+        mka pbrp -j$(nproc --all)
     
     - name: Locate output
       id: out
