@@ -103,10 +103,11 @@ jobs:
     - name: Building TWRP
       run: |
         cd ${GITHUB_WORKSPACE}/TWRP
-        set +e
-        source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
         export TW_INCLUDE_CRYPTO=true
+        export TW_USE_EXTERNAL_FSCRYPT=true
+        set +e
+        source build/envsetup.sh
         set -e
         lunch twrp_${{ github.event.inputs.DEVICE_NAME }}-eng
         mka ${{ github.event.inputs.BUILD_TARGET }}image
