@@ -1,4 +1,4 @@
-name: TWRP - Build cepheus
+name: PBRP - Build cepheus
 
 on:
   workflow_dispatch:
@@ -39,7 +39,7 @@ on:
       
 jobs:
   build:
-    name: Build TWRP by ${{ github.actor }}
+    name: Build PBRP by ${{ github.actor }}
     runs-on: ubuntu-22.04
 
     steps:
