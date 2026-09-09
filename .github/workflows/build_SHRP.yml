@@ -68,9 +68,10 @@ jobs:
         git clone https://gitlab.com/OrangeFox/misc/scripts
         cd scripts
         sudo bash setup/android_build_env.sh
+        sudo apt-get update
         sudo apt-get install -y python2.7 python2.7-dev
         sudo ln -sf /usr/bin/python2.7 /usr/bin/python2
-        sudo ln -sf /usr/bin/python2.7 /usr/bin/python2.7
+        sudo ln -sf /usr/bin/python2.7 /usr/bin/python
 
     - name: Set-up Manifest (TWRP minimal manifest)
       run: |
