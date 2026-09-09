@@ -92,9 +92,18 @@ jobs:
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
         set -e
+        # Masuk ke direktori device tree cepheus
+        cd ${GITHUB_WORKSPACE}/TWRP/device/xiaomi/cepheus
+
+        # Ubah nama file makefile twrp menjadi pb
+        mv twrp_cepheus.mk pb_cepheus.mk
+
+        # Ubah isi referensi twrp_cepheus di AndroidProducts.mk menjadi pb_cepheus
+        sed -i 's/twrp_cepheus/pb_cepheus/g' AndroidProducts.mk
+        sed -i 's/twrp_cepheus/pb_cepheus/g' pb_cepheus.mk
         lunch twrp_${{ github.event.inputs.DEVICE_NAME }}-eng
         make clean
-        mka pbrp
+        mka ${{ github.event.inputs.BUILD_TARGET }}image
     
     - name: Locate output
       id: out
