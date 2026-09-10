@@ -112,6 +112,14 @@ jobs:
         echo "TW_THEME := portrait_hdpi" >> $DEVICE_CONFIG
         echo "RECOVERY_GRAPHICS_FORCE_USE_LINELENGTH := true" >> $DEVICE_CONFIG
     
+    - name: Inject SHRP Important Flags
+      run: |
+        DEVICE_CONFIG=$(find ${GITHUB_WORKSPACE} -name "BoardConfig.mk" | grep "cepheus")
+        echo "SHRP_INTERNAL := /sdcard" >> $DEVICE_CONFIG
+        echo "SHRP_OTG := /usb_otg" >> $DEVICE_CONFIG
+        echo "SHRP_FLASH := 1" >> $DEVICE_CONFIG
+        echo "SHRP_EDL_MODE := 1" >> $DEVICE_CONFIG
+    
     - name: Building TWRP
       run: |
         cd ${GITHUB_WORKSPACE}/TWRP
