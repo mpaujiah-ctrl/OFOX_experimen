@@ -104,6 +104,14 @@ jobs:
       run: |
         sed -i 's/"libfscrypttwrp"/"libfscrypt"/g' ${GITHUB_WORKSPACE}/TWRP/system/core/fs_mgr/Android.bp || true
     
+    - name: Inject Graphics Flags
+      run: |
+        DEVICE_CONFIG=$(find ${GITHUB_WORKSPACE} -name "BoardConfig.mk" | grep "cepheus")
+        echo "TARGET_SCREEN_HEIGHT := 2340" >> $DEVICE_CONFIG
+        echo "TARGET_SCREEN_WIDTH := 1080" >> $DEVICE_CONFIG
+        echo "TW_THEME := portrait_hdpi" >> $DEVICE_CONFIG
+        echo "RECOVERY_GRAPHICS_FORCE_USE_LINELENGTH := true" >> $DEVICE_CONFIG
+    
     - name: Building TWRP
       run: |
         cd ${GITHUB_WORKSPACE}/TWRP
