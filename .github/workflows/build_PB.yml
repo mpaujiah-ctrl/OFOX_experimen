@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       MANIFEST_BRANCH:
-        description: 'TWRP Minimal Manifest Branch'
+        description: 'PBRP Minimal Manifest Branch'
         required: true
         default: 'android-12.1'
         type: choice
@@ -88,9 +88,9 @@ jobs:
     - name: Building TWRP
       run: |
         cd ${GITHUB_WORKSPACE}/TWRP
+        export ALLOW_MISSING_DEPENDENCIES=true
         set +e
         source build/envsetup.sh
-        export ALLOW_MISSING_DEPENDENCIES=true
         set -e
         # Masuk ke direktori device tree cepheus
         cd ${GITHUB_WORKSPACE}/TWRP/device/xiaomi/cepheus
