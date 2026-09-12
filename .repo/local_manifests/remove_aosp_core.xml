@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <remote name="TeamWin" fetch="https://github.com/TeamWin" review="https://gerrit.twrp.me"/>
+  <remove-project name="platform/system/core" />
+  <project path="system/core" name="android_system_core" remote="TeamWin" revision="android-12.1" />
+</manifest>
