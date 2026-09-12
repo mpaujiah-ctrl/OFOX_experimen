@@ -98,11 +98,7 @@ jobs:
         echo "Pemeriksaan lokasi file BoardConfig:"
         echo $DEVICE_CONFIG
         echo "Isi akhir BoardConfig.mk:"
-        tail -n 10 $DEVICE_CONFIG
-    
-    - name: Patch fs_mgr Android.bp
-      run: |
-        sed -i 's/"libfscrypttwrp"/"libfscrypt"/g' ${GITHUB_WORKSPACE}/TWRP/system/core/fs_mgr/Android.bp || true
+        tail -n 10 $DEVICE_CONFIG    
     
     - name: Inject Graphics Flags
       run: |
