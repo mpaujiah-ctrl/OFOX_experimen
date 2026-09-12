@@ -89,6 +89,21 @@ jobs:
         cd ${{ github.event.inputs.DEVICE_PATH }}
         echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
          
+    - name: Inject FSCRYPT Fix
+      run: |
+        DEVICE_CONFIG=$(find ${GITHUB_WORKSPACE} -name "BoardConfig.mk" | grep "cepheus")
+        echo "TW_USE_EXTERNAL_FSCRYPT := true" >> $DEVICE_CONFIG
+        echo "TW_INCLUDE_CRYPTO := true" >> $DEVICE_CONFIG
+        echo "TW_INCLUDE_CRYPTO_FBE := true" >> $DEVICE_CONFIG
+        echo "Pemeriksaan lokasi file BoardConfig:"
+        echo $DEVICE_CONFIG
+        echo "Isi akhir BoardConfig.mk:"
+        tail -n 10 $DEVICE_CONFIG
+    
+    - name: Patch fs_mgr Android.bp
+      run: |
+        sed -i 's/"libfscrypttwrp"/"libfscrypt"/g' ${GITHUB_WORKSPACE}/TWRP/system/core/fs_mgr/Android.bp || true
+    
     - name: Inject Graphics Flags
       run: |
         DEVICE_CONFIG=$(find ${GITHUB_WORKSPACE} -name "BoardConfig.mk" | grep "cepheus")
