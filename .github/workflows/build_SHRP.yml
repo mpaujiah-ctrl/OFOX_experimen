@@ -120,7 +120,16 @@ jobs:
         echo "SHRP_FLASH := 1" >> $DEVICE_CONFIG
         echo "SHRP_EDL_MODE := 1" >> $DEVICE_CONFIG
     
-    - name: Building TWRP
+    - name: Inject Fix FastbootD & Graphics
+      run: |
+        DEVICE_CONFIG=$(find ${GITHUB_WORKSPACE} -name "BoardConfig.mk" | grep "cepheus")
+        echo "TW_HAS_MTP := true" >> $DEVICE_CONFIG
+        echo "TW_INPUT_BLACK_LIST := \"hbtp_vm\"" >> $DEVICE_CONFIG
+        echo "TW_USE_TOOLBOX := true" >> $DEVICE_CONFIG
+        echo "TW_EXCLUDE_SUPERSU := true" >> $DEVICE_CONFIG
+        echo "RECOVERY_GRAPHICS_FORCE_SINGLE_BUFFER := true" >> $DEVICE_CONFIG
+    
+    - name: Building SHRP
       run: |
         cd ${GITHUB_WORKSPACE}/TWRP
         export ALLOW_MISSING_DEPENDENCIES=true
