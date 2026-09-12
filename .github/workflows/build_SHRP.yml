@@ -88,11 +88,7 @@ jobs:
         git clone ${{ github.event.inputs.DEVICE_TREE }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
         cd ${{ github.event.inputs.DEVICE_PATH }}
         echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
-      
-    - name: Patch fs_mgr Android.bp
-      run: |
-        sed -i 's/"libfscrypttwrp"/"libfscrypt"/g' ${GITHUB_WORKSPACE}/TWRP/system/core/fs_mgr/Android.bp || true
-    
+         
     - name: Inject Graphics Flags
       run: |
         DEVICE_CONFIG=$(find ${GITHUB_WORKSPACE} -name "BoardConfig.mk" | grep "cepheus")
