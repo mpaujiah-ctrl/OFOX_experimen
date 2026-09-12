@@ -73,11 +73,11 @@ jobs:
         sudo ln -sf /usr/bin/python2.7 /usr/bin/python2
         sudo ln -sf /usr/bin/python2.7 /usr/bin/python
 
-    - name: Set-up Manifest (TWRP minimal manifest)
+    - name: Set-up Manifest (SHRP minimal manifest)
       run: |
         mkdir -p ${GITHUB_WORKSPACE}/TWRP
         cd ${GITHUB_WORKSPACE}/TWRP
-        git config --global user.name "AS"
+        git config --global user.name "Agus"
         git config --global user.email "WWW"
         repo init -u https://github.com/SHRP/manifest.git -b ${{ github.event.inputs.MANIFEST_BRANCH }}
         repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
@@ -151,7 +151,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-          name: TWRP-cepheus-${{ github.run_number }}
+          name: SHRP-cepheus-${{ github.run_number }}
           path: |
             ${{ steps.out.outputs.out_dir }}/recovery.img
             ${{ steps.out.outputs.out_dir }}/*.zip
