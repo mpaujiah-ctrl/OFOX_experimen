@@ -79,7 +79,7 @@ jobs:
         cd ${GITHUB_WORKSPACE}/TWRP
         git config --global user.name "Agus"
         git config --global user.email "WWW"
-        repo init -u https://github.com/RedWolfRecovery/rw_manifest.git -b ${{ github.event.inputs.MANIFEST_BRANCH }}
+        repo init -u https://https://github.com/mpaujiah-ctrl/rw_manifest.git -b ${{ github.event.inputs.MANIFEST_BRANCH }}
         repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
     - name: Clone Device Tree
