@@ -10,7 +10,9 @@ on:
         type: choice
         options:
         - twrp-12.1
-        - twrp-11       
+        - twrp-11
+        - twrp-14
+        - twrp-14.1
       DEVICE_TREE:
         description: 'Device Tree'
         required: true
