@@ -81,6 +81,12 @@ jobs:
         git config --global user.email "WWW"
         repo init -u https://github.com/SHRP/manifest.git -b ${{ github.event.inputs.MANIFEST_BRANCH }}
        
+    - name: Debug - Find system/core project name
+      run: |
+        cd ${GITHUB_WORKSPACE}/TWRP
+        echo "=== Isi manifest gabungan (setelah semua <include>) ==="
+        repo manifest -o - | grep -i "core\|fs_mgr" -B1 -A1
+    
     - name: Inject TeamWin system/core (fix libfscrypttwrp)
       run: |
         mkdir -p ${GITHUB_WORKSPACE}/TWRP/.repo/local_manifests
