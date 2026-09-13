@@ -73,36 +73,13 @@ jobs:
         sudo ln -sf /usr/bin/python2.7 /usr/bin/python2
         sudo ln -sf /usr/bin/python2.7 /usr/bin/python
 
-    - name: Set-up Manifest (SHRP minimal manifest)
+    - name: Set-up Manifest (TWRP minimal manifest)
       run: |
         mkdir -p ${GITHUB_WORKSPACE}/TWRP
         cd ${GITHUB_WORKSPACE}/TWRP
-        git config --global user.name "Agus"
+        git config --global user.name "AS"
         git config --global user.email "WWW"
         repo init -u https://github.com/SHRP/manifest.git -b ${{ github.event.inputs.MANIFEST_BRANCH }}
-       
-    - name: Debug - Find system/core project name
-      run: |
-        cd ${GITHUB_WORKSPACE}/TWRP
-        echo "=== Isi manifest gabungan (setelah semua <include>) ==="
-        repo manifest -o - | grep -i "core\|fs_mgr" -B1 -A1
-    
-    - name: Inject TeamWin system/core (fix libfscrypttwrp)
-      run: |
-        mkdir -p ${GITHUB_WORKSPACE}/TWRP/.repo/local_manifests
-        cat > ${GITHUB_WORKSPACE}/TWRP/.repo/local_manifests/remove_aosp_core.xml << 'EOF'
-        <?xml version="1.0" encoding="UTF-8"?>
-        <manifest>
-          <remote name="TeamWin" fetch="https://github.com/TeamWin" review="https://gerrit.twrp.me"/>
-          <remove-project name="platform/system/core" />
-          <project path="system/core" name="android_system_core" remote="TeamWin" revision="android-12.1" />
-        </manifest>
-        EOF
-        cat ${GITHUB_WORKSPACE}/TWRP/.repo/local_manifests/remove_aosp_core.xml
-
-    - name: Sync Manifest
-      run: |
-        cd ${GITHUB_WORKSPACE}/TWRP
         repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
     
     - name: Clone Device Tree
@@ -115,13 +92,16 @@ jobs:
     - name: Inject FSCRYPT Fix
       run: |
         DEVICE_CONFIG=$(find ${GITHUB_WORKSPACE} -name "BoardConfig.mk" | grep "cepheus")
-        echo "TW_USE_EXTERNAL_FSCRYPT := true" >> $DEVICE_CONFIG
         echo "TW_INCLUDE_CRYPTO := true" >> $DEVICE_CONFIG
         echo "TW_INCLUDE_CRYPTO_FBE := true" >> $DEVICE_CONFIG
         echo "Pemeriksaan lokasi file BoardConfig:"
         echo $DEVICE_CONFIG
         echo "Isi akhir BoardConfig.mk:"
         tail -n 10 $DEVICE_CONFIG    
+    
+    - name: Patch fs_mgr Android.bp
+      run: |
+        sed -i 's/"libfscrypttwrp"/"libfscrypt"/g' ${GITHUB_WORKSPACE}/TWRP/system/core/fs_mgr/Android.bp || true
     
     - name: Inject Graphics Flags
       run: |
