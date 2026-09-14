@@ -132,12 +132,12 @@ jobs:
       run: |
         cd ${GITHUB_WORKSPACE}/TWRP
         export ALLOW_MISSING_DEPENDENCIES=true
-        export TW_INCLUDE_CRYPTO=true
-        export TW_USE_EXTERNAL_FSCRYPT=true
+        export TW_INCLUDE_CRYPTO=true        
         set +e
         source build/envsetup.sh
         set -e
         lunch twrp_${{ github.event.inputs.DEVICE_NAME }}-eng
+        make installclean
         mka ${{ github.event.inputs.BUILD_TARGET }}image
 
     - name: Locate output
