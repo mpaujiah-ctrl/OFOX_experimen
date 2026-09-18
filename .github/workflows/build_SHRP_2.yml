@@ -81,7 +81,11 @@ jobs:
 
     - name: Inject Clean SHRP Flags Only
       run: |
-        DEVICE_CONFIG=$(find ${GITHUB_WORKSPACE}/${{ github.event.inputs.DEVICE_PATH }} -name "BoardConfig.mk")
+        DEVICE_CONFIG=$(find ${GITHUB_WORKSPACE}/TWRP/${{ github.event.inputs.DEVICE_PATH }} -name "BoardConfig.mk")
+        if [ -z "$DEVICE_CONFIG" ]; then
+          echo "BoardConfig.mk tidak ditemukan!"
+          exit 1
+        fi
         echo "" >> $DEVICE_CONFIG
         echo "# SHRP Configurations" >> $DEVICE_CONFIG
         echo "SHRP_PATH := device/xiaomi/cepheus" >> $DEVICE_CONFIG
